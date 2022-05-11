@@ -4,6 +4,17 @@ import { artistsData } from "./songsData";
 
 const prisma = new PrismaClient();
 
+const email = "admin@admins.com";
+const salt = bcrypt.genSaltSync();
+const password = bcrypt.hashSync("password", salt);
+const userUpsert = prisma.user.upsert({
+  where: { email },
+  update: {},
+  create: { email, password },
+});
+
+const songs = prisma.song.findMany({});
+
 function upsertArtist(artist: typeof artistsData[number]) {
   const createdSongs = artist.songs.map(({ name, duration, url }) => ({ name, duration, url }));
 
@@ -16,19 +27,28 @@ function upsertArtist(artist: typeof artistsData[number]) {
     },
   });
 }
-const artistUpserts = artistsData.map(upsertArtist);
+const uspsertedArtists = artistsData.map(upsertArtist);
 
-const email = "admin@admins.com";
-const salt = bcrypt.genSaltSync();
-const password = bcrypt.hashSync("password", salt);
+const createdPlaylists = Array(10)
+  .fill(0)
+  .map(async (_, i) =>
+    prisma.playlist.create({
+      data: {
+        name: `Playlist #${i + 1}`,
+        user: {
+          connect: { id: (await userUpsert).id },
+        },
+        songs: {
+          connect: (await songs).map((song) => ({
+            id: song.id,
+          })),
+        },
+      },
+    })
+  );
 
-const user = prisma.user.upsert({
-  where: { email },
-  update: {},
-  create: { email, password },
-});
-
-const seeds = [...artistUpserts, user];
+// i don't need to add songs and user to this array since i `await` them in `createdPlaylists`
+const seeds = [...uspsertedArtists, ...createdPlaylists];
 
 Promise.all(seeds)
   .catch((e: Error) => {
