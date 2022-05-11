@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 import { Box } from "@chakra-ui/layout";
 
+import SideBar from "./components/sidebar";
+
 function MainLayout({ children }: { children: ReactNode }) {
   return (
     <Box width="100vw" height="100vh" display="flex" flexWrap="wrap">
-      <Box as="aside" width="250px" height="calc(100% - 100px)">
-        Side Bar
-      </Box>
+      <SideBar />
       <Box as="main" width="calc(100% - 250px)" height="calc(100% - 100px)">
         {children}
       </Box>
