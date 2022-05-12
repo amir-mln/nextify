@@ -3,7 +3,7 @@ import { Box } from "@chakra-ui/layout";
 
 import SideBar from "./components/sidebar";
 
-function MainLayout({ children }: { children: ReactNode }) {
+function PlayerLayout({ children }: { children: ReactNode }) {
   return (
     <Box width="100vw" height="100vh" display="flex" flexWrap="wrap">
       <SideBar />
@@ -17,4 +17,4 @@ function MainLayout({ children }: { children: ReactNode }) {
   );
 }
 
-export default MainLayout;
+export default PlayerLayout;
