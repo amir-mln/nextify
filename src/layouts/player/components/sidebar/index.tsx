@@ -1,7 +1,8 @@
 import NextLink from "next/link";
-import NextImage from "next/image";
 import { MdHome, MdSearch, MdLibraryMusic, MdPlaylistAdd, MdFavorite } from "react-icons/md";
 import { Box, List, ListItem, ListIcon, Divider, Link as ChakraLink } from "@chakra-ui/layout";
+
+import BrandLogo from "components/brand-logo";
 
 const navItems = [
   {
@@ -40,11 +41,7 @@ function SideBar() {
   return (
     <Box as="aside" width="250px" paddingX="15px" height="calc(100% - 100px)" backgroundColor="gray.900">
       <Box as="nav" paddingY="20px">
-        <NextLink href="/" aria-label="home" passHref>
-          <ChakraLink display="block" marginBottom="20px">
-            <NextImage src="/img/nextify-logo.png" width={250} height={45} />
-          </ChakraLink>
-        </NextLink>
+        <BrandLogo />
         <List marginBottom="24px" spacing={2}>
           {navItems.map((menu) => (
             <ListItem fontSize="16px" key={menu.name}>
