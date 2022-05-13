@@ -4,7 +4,7 @@ import prismaClient from "lib/prisma-client";
 
 import type { User } from "@prisma/client";
 
-type ValidationStatus = "VALID_USER" | "INVALID_USER";
+type ValidationStatus = "VALID" | "INVALID";
 type ValidatorReturnType = { user: User | null; status: ValidationStatus };
 
 export async function validateUser(req: NextApiRequest): Promise<ValidatorReturnType> {
@@ -17,8 +17,8 @@ export async function validateUser(req: NextApiRequest): Promise<ValidatorReturn
 
     if (!user || !token || !id) throw new Error();
 
-    return { user, status: "VALID_USER" };
+    return { user, status: "VALID" };
   } catch {
-    return { user: null, status: "INVALID_USER" };
+    return { user: null, status: "INVALID" };
   }
 }
