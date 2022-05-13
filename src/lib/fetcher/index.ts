@@ -1,5 +1,11 @@
-export default async function fetcher(url: string, data: any) {
-  const res = await fetch(`/api${url}`, {
+export type JsonSafeValues = string | number | boolean | null | JsonSafeValues[];
+
+export type ValidFetcherUrl = `/api/${string}` | `http${string}`;
+
+export type ValidJsonObj = { [prop: string]: JsonSafeValues };
+
+export default async function fetcher(url: ValidFetcherUrl, data?: ValidJsonObj) {
+  const res = await fetch(url, {
     method: data ? "POST" : "GET",
     credentials: "include",
     headers: {
