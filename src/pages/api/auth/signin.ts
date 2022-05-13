@@ -13,7 +13,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   const passIsCorrect = await bcrypt.compare(password, user?.password || "");
 
   if (user && passIsCorrect) {
-    const token = jwt.sign({ email, id: user.id, date: Date.now() }, "s.e.cR.ET", { expiresIn: "8h" });
+    const token = jwt.sign({ email, id: user.id, date: Date.now() }, "jwt-secret", { expiresIn: "8h" });
     const cookieVal = cookie.serialize("AUTH_ACCESS_TOKEN", token, {
       path: "/",
       httpOnly: true,

@@ -18,7 +18,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     return res.status(401).json({ error: "Something's wrong..." });
   }
 
-  const token = jwt.sign({ email, id: user.id, time: Date.now() }, "jWtSeCrEt", { expiresIn: "8h" });
+  const token = jwt.sign({ email, id: user.id, time: Date.now() }, "jwt-secret", { expiresIn: "8h" });
   const cookieVal = cookie.serialize("AUTH_ACCESS_TOKEN", token, {
     path: "/",
     httpOnly: true,
