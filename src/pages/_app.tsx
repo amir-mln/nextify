@@ -6,7 +6,7 @@ import CHAKRA_THEME from "constants/chakra-theme";
 import "reset-css";
 
 import type { AppProps } from "next/app";
-import type { LayoutTypes } from "layouts/types";
+import type { LayoutTypes } from "layouts/index";
 
 type CustomAppProps = {
   [key in keyof AppProps]: key extends "Component"
