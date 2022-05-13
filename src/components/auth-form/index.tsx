@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Center } from "@chakra-ui/layout";
 import { Box, Input, Button } from "@chakra-ui/react";
 
-import authFetcher from "lib/fetcher/auth";
+import authFetcher from "lib/auth/fetcher";
 import BrandLogo from "components/brand-logo";
 
 function AuthForm({ mode }: { mode: "signin" | "signup" }) {
