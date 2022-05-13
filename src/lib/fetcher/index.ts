@@ -1,5 +1,5 @@
 export default async function fetcher(url: string, data: any) {
-  const res = await fetch(`${window.location.origin}/api${url}`, {
+  const res = await fetch(`/api${url}`, {
     method: data ? "POST" : "GET",
     credentials: "include",
     headers: {
