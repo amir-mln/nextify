@@ -7,7 +7,7 @@ function PlayerLayout({ children }: { children: ReactNode }) {
   return (
     <Box width="100vw" height="100vh" display="flex" flexWrap="wrap">
       <SideBar />
-      <Box as="main" width="calc(100% - 250px)" height="calc(100% - 100px)">
+      <Box as="main" width="calc(100% - 250px)" height="calc(100% - 100px)" overflowY="auto">
         {children}
       </Box>
       <Box as="footer" position="absolute" bottom="0" width="100%" height="100px">
