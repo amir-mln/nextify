@@ -3,6 +3,9 @@ import { MdHome, MdSearch, MdLibraryMusic, MdPlaylistAdd, MdFavorite } from "rea
 import { Box, List, ListItem, ListIcon, Divider, Link as ChakraLink } from "@chakra-ui/layout";
 
 import BrandLogo from "components/brand-logo";
+import useCustomSWR from "hooks/use-custom-swr";
+
+import type { Playlist } from "@prisma/client";
 
 const navItems = [
   {
@@ -35,9 +38,27 @@ const musicMenu = [
   },
 ];
 
-const playlists = new Array(30).fill(1).map((_, i) => `Playlist ${i + 1}`);
-
 function SideBar() {
+  const { data: playlists, loading } = useCustomSWR<Playlist[]>("/api/playlists");
+
+  function renderPlaylistItems() {
+    if (loading || !playlists) return null;
+
+    return playlists.map((playlist) => (
+      <ListItem key={playlist.id + playlist.name}>
+        <NextLink href="/" passHref>
+          <ChakraLink
+            color="gray.400"
+            outline="none"
+            _focus={{ outline: "none" }}
+            _hover={{ textDecoration: "none", color: "gray.100" }}
+          >
+            {playlist.name}
+          </ChakraLink>
+        </NextLink>
+      </ListItem>
+    ));
+  }
   return (
     <Box as="aside" width="250px" paddingX="15px" height="calc(100% - 100px)" backgroundColor="gray.900">
       <Box as="nav" paddingY="20px">
@@ -80,20 +101,7 @@ function SideBar() {
       <Divider borderColor="gray.100" marginBottom="20px" opacity="0.1" />
 
       <List overflowY="auto" height="calc(100% - 313px)" spacing={2}>
-        {playlists.map((playlist) => (
-          <ListItem key={playlist}>
-            <NextLink href="/" passHref>
-              <ChakraLink
-                color="gray.400"
-                outline="none"
-                _focus={{ outline: "none" }}
-                _hover={{ textDecoration: "none", color: "gray.100" }}
-              >
-                {playlist}
-              </ChakraLink>
-            </NextLink>
-          </ListItem>
-        ))}
+        {renderPlaylistItems()}
       </List>
     </Box>
   );
