@@ -4,13 +4,16 @@ import { artistsData } from "./songsData";
 
 const prisma = new PrismaClient();
 
+const firstName = "Amir";
+const lastName = "Molaeyan";
 const email = "admin@admins.com";
 const salt = bcrypt.genSaltSync();
 const password = bcrypt.hashSync("password", salt);
+
 const userUpsert = prisma.user.upsert({
   where: { email },
   update: {},
-  create: { email, password },
+  create: { email, password, firstName, lastName },
 });
 
 const songs = prisma.song.findMany({});
