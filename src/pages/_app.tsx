@@ -17,9 +17,11 @@ type CustomAppProps = {
 const theme = extendTheme(CHAKRA_THEME);
 
 function MyApp({ Component, pageProps }: CustomAppProps) {
+  const layoutType = Component.layoutType || "FULL_PAGE";
+
   return (
     <ChakraProvider theme={theme}>
-      <MainLayout type={Component.layoutType}>
+      <MainLayout type={layoutType}>
         <Component {...pageProps} />
       </MainLayout>
     </ChakraProvider>
