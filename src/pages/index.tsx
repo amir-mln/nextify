@@ -50,7 +50,7 @@ Home.layoutType = LAYOUT_TYPES.PLAYER;
 
 async function getServerSideProps(context: GetServerSidePropsContext) {
   const user = await getValidatedUser(context.req);
-  const artists = await prismaClient.artist.findMany({});
+  const artists = await prismaClient.artist.findMany({ select: { name: true, id: true } });
   // the middleware that runs before this guarantees that user wont be null
   const playlistsCount = await prismaClient.playlist.count({ where: { userId: user!.id } });
 
