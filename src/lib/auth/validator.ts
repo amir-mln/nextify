@@ -1,24 +1,26 @@
 import jwt from "jsonwebtoken";
-import { NextApiRequest } from "next";
 import prismaClient from "lib/prisma-client";
 
 import type { User } from "@prisma/client";
+import type { NextApiRequestCookies } from "next/dist/server/api-utils";
 
-type ValidationStatus = "VALID" | "INVALID";
-type ValidatorReturnType = { user: User | null; status: ValidationStatus };
+export type ValidatedUser = Pick<User, "id" | "email" | "firstName" | "lastName">;
+export type RequestCookies = { cookies: NextApiRequestCookies };
+export interface ValidationRequest extends RequestCookies {}
 
-export async function validateUser(req: NextApiRequest): Promise<ValidatorReturnType> {
+export async function validateUser(req: ValidationRequest): Promise<ValidatedUser | null> {
   const token = req.cookies.AUTH_ACCESS_TOKEN;
   try {
     const { id } = jwt.verify(token, "jwt-secret") as Partial<User>;
-    const user: User | null = await prismaClient.user.findUnique({
+    const user = await prismaClient.user.findUnique({
       where: { id },
     });
-
     if (!user || !token || !id) throw new Error();
 
-    return { user, status: "VALID" };
+    const { password, createdAt, updatedAt, ...validatedUser } = user;
+
+    return validatedUser;
   } catch {
-    return { user: null, status: "INVALID" };
+    return null;
   }
 }
