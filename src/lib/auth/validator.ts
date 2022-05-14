@@ -24,3 +24,14 @@ export async function validateUser(req: ValidationRequest): Promise<ValidatedUse
     return null;
   }
 }
+
+export function getValidatedToken(req: ValidationRequest) {
+  const token = req.cookies.AUTH_ACCESS_TOKEN;
+  try {
+    const userJWT = jwt.verify(token, "jwt-secret") as Partial<User>;
+
+    return userJWT;
+  } catch {
+    return null;
+  }
+}
