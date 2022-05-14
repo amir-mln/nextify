@@ -1,27 +1,32 @@
-import { Artist } from "@prisma/client";
 import { Image } from "@chakra-ui/react";
+import { Artist } from "@prisma/client";
 import { Box, Text, Flex } from "@chakra-ui/layout";
 
 import prismaClient from "lib/prisma-client";
 import GradientLayout from "layouts/gradient";
 import { LAYOUT_TYPES } from "layouts/constants";
+import { validateUser } from "lib/auth/validator";
 
-function Home({ artists }: { artists: Artist[] }) {
+import type { ValidatedUser } from "lib/auth/validator";
+import type { GetServerSidePropsContext } from "next";
+
+type HomePageProps = { artists: Artist[]; userInfo: ValidatedUser & { playlistsCount: number } };
+function Home({ artists, userInfo }: HomePageProps) {
   return (
     <GradientLayout
       roundImage
       color="teal.900"
       subtitle="profile"
-      title="Scott Moss"
-      description="15 public playlists"
+      title={userInfo.firstName + " " + userInfo.lastName}
+      description={`${userInfo.playlistsCount} public playlists`}
       image="https://dl.dropboxusercontent.com/s/bgiv0ssz3xpotz9/peep.png?dl=0"
     >
       <Box color="white" paddingX="40px">
         <Box marginBottom="40px">
           <Text fontSize="2xl" fontWeight="bold">
-            Top artist this month
+            Top Artists This Month
           </Text>
-          <Text fontSize="md">only visible to you</Text>
+          <Text fontSize="md">Based On Your Preference</Text>
         </Box>
         <Flex>
           {artists.map((artist) => (
@@ -43,12 +48,16 @@ function Home({ artists }: { artists: Artist[] }) {
 
 Home.layoutType = LAYOUT_TYPES.PLAYER;
 
-export default Home;
-
-export async function getServerSideProps() {
+async function getServerSideProps(context: GetServerSidePropsContext) {
+  const user = await validateUser(context.req);
   const artists = await prismaClient.artist.findMany({});
+  // the middleware that runs before this guarantees that user wont be null
+  const playlistsCount = await prismaClient.playlist.count({ where: { userId: user!.id } });
 
   return {
-    props: { artists },
+    props: { artists, userInfo: { ...user, playlistsCount } },
   };
 }
+
+export { getServerSideProps };
+export default Home;
