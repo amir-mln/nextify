@@ -46,7 +46,7 @@ function SideBar() {
 
     return playlists.map((playlist) => (
       <ListItem key={playlist.id + playlist.name}>
-        <NextLink href="/" passHref>
+        <NextLink href={`/playlists/${playlist.id}`} passHref>
           <ChakraLink
             color="gray.400"
             outline="none"
