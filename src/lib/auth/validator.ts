@@ -8,7 +8,7 @@ export type ValidatedUser = Pick<User, "id" | "email" | "firstName" | "lastName"
 export type RequestCookies = { cookies: NextApiRequestCookies };
 export interface ValidationRequest extends RequestCookies {}
 
-export async function validateUser(req: ValidationRequest): Promise<ValidatedUser | null> {
+export async function getValidatedUser(req: ValidationRequest): Promise<ValidatedUser | null> {
   const token = req.cookies.AUTH_ACCESS_TOKEN;
   try {
     const { id } = jwt.verify(token, "jwt-secret") as Partial<User>;

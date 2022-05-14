@@ -5,7 +5,7 @@ import { Box, Text, Flex } from "@chakra-ui/layout";
 import prismaClient from "lib/prisma-client";
 import GradientLayout from "layouts/gradient";
 import { LAYOUT_TYPES } from "layouts/constants";
-import { validateUser } from "lib/auth/validator";
+import { getValidatedUser } from "lib/auth/validator";
 
 import type { ValidatedUser } from "lib/auth/validator";
 import type { GetServerSidePropsContext } from "next";
@@ -49,7 +49,7 @@ function Home({ artists, userInfo }: HomePageProps) {
 Home.layoutType = LAYOUT_TYPES.PLAYER;
 
 async function getServerSideProps(context: GetServerSidePropsContext) {
-  const user = await validateUser(context.req);
+  const user = await getValidatedUser(context.req);
   const artists = await prismaClient.artist.findMany({});
   // the middleware that runs before this guarantees that user wont be null
   const playlistsCount = await prismaClient.playlist.count({ where: { userId: user!.id } });
