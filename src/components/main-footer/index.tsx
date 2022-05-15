@@ -1,4 +1,5 @@
 import { Box, Text } from "@chakra-ui/layout";
+import Player from "components/player";
 
 function MainFooter() {
   return (
@@ -17,7 +18,9 @@ function MainFooter() {
         <Text fontSize="large">Song Name</Text>
         <Text fontSize="sm">Artist Name</Text>
       </Box>
-      <Box flexBasis="40%">Player</Box>
+      <Box flexBasis="40%">
+        <Player />
+      </Box>
       <Box>controls</Box>
     </Box>
   );
