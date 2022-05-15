@@ -48,10 +48,10 @@ function SideBar() {
       <ListItem key={playlist.id + playlist.name}>
         <NextLink href={`/playlists/${playlist.id}`} passHref>
           <ChakraLink
-            color="gray.400"
+            color="gray.300"
             outline="none"
             _focus={{ outline: "none" }}
-            _hover={{ textDecoration: "none", color: "gray.100" }}
+            _hover={{ textDecoration: "none", color: "gray.50" }}
           >
             {playlist.name}
           </ChakraLink>
@@ -61,7 +61,7 @@ function SideBar() {
   }
 
   return (
-    <Box as="aside" width="250px" paddingX="15px" height="calc(100% - 100px)" backgroundColor="gray.800">
+    <Box as="aside" width="250px" paddingX="15px" height="calc(100% - 100px)" backgroundColor="gray.700">
       <Box as="nav" paddingY="20px">
         <BrandLogo />
         <List marginBottom="24px" spacing={2}>
@@ -69,10 +69,10 @@ function SideBar() {
             <ListItem fontSize="16px" key={menu.name}>
               <NextLink href={menu.route} passHref>
                 <ChakraLink
-                  color="gray.400"
+                  color="gray.300"
                   outline="none"
                   _focus={{ outline: "none" }}
-                  _hover={{ textDecoration: "none", color: "gray.100" }}
+                  _hover={{ textDecoration: "none", color: "gray.50" }}
                 >
                   <ListIcon as={menu.icon} marginRight="20px" fontSize="1.25rem" />
                   {menu.name}
@@ -86,10 +86,10 @@ function SideBar() {
             <ListItem fontSize="16px" key={menu.name}>
               <NextLink href={menu.route} passHref>
                 <ChakraLink
-                  color="gray.400"
+                  color="gray.300"
                   outline="none"
                   _focus={{ outline: "none" }}
-                  _hover={{ textDecoration: "none", color: "gray.100" }}
+                  _hover={{ textDecoration: "none", color: "gray.50" }}
                 >
                   <ListIcon as={menu.icon} marginRight="20px" fontSize="1.25rem" />
                   {menu.name}
@@ -99,7 +99,7 @@ function SideBar() {
           ))}
         </List>
       </Box>
-      <Divider borderColor="gray.100" marginBottom="20px" opacity="0.1" />
+      <Divider borderColor="gray.50" marginBottom="20px" opacity="0.1" />
 
       <List overflowY="auto" height="calc(100% - 313px)" spacing={2}>
         {renderPlaylistItems()}
