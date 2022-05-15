@@ -1,6 +1,6 @@
 import { Box, Text } from "@chakra-ui/layout";
 
-function PlayerFooter() {
+function MainFooter() {
   return (
     <Box
       as="footer"
@@ -23,4 +23,4 @@ function PlayerFooter() {
   );
 }
 
-export default PlayerFooter;
+export default MainFooter;
