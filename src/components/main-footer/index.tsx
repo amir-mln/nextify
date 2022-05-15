@@ -6,7 +6,7 @@ function MainFooter() {
       as="footer"
       padding="4"
       width="100%"
-      height="100px"
+      height="81px"
       bg="gray.800"
       color="gray.100"
       display="flex"
