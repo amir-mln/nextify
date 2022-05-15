@@ -8,7 +8,7 @@ function MainFooter() {
       padding="4"
       width="100%"
       height="81px"
-      bg="gray.800"
+      bg="gray.700"
       color="gray.100"
       display="flex"
       alignItems="center"

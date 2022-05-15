@@ -61,7 +61,7 @@ function SideBar() {
   }
 
   return (
-    <Box as="aside" width="250px" paddingX="15px" height="calc(100% - 81px)" backgroundColor="gray.700">
+    <Box as="aside" width="250px" paddingX="15px" height="calc(100% - 81px)" backgroundColor="gray.800">
       <Box as="nav" paddingY="20px">
         <BrandLogo />
         <List marginBottom="24px" spacing={2}>
