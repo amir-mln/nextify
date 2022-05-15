@@ -1,40 +1,21 @@
 import { Artist, Playlist, Song } from "@prisma/client";
 
 import prismaClient from "lib/prisma-client";
-import GradientLayout from "layouts/gradient";
 import SongsTable from "components/song-table";
-import { LAYOUT_TYPES } from "layouts/constants";
 import { getValidatedToken } from "lib/auth/validator";
 
 import type { GetServerSidePropsContext } from "next";
+import type { CustomServerSideResult } from "pages/_app";
 
 export type PlayListSong = Song & Pick<Artist, "name">;
 
-export type PlaylistProps = {
-  playlistInfo: Playlist & { songs: PlayListSong[] };
-};
+export type PlaylistProps = { songs: PlayListSong[] };
 
-function PlayList({ playlistInfo }: PlaylistProps) {
-  const { name, songs, id } = playlistInfo;
-
-  return (
-    <GradientLayout
-      title={name}
-      color="green.900"
-      subtitle="playlist"
-      roundImage={false}
-      description={`${songs.length} songs`}
-      image={`https://picsum.photos/400?random=${id}`}
-    >
-      <SongsTable songs={songs} />
-    </GradientLayout>
-  );
+export default function PlayList({ songs }: PlaylistProps) {
+  return <SongsTable songs={songs} />;
 }
-PlayList.layoutType = LAYOUT_TYPES.PLAYER;
 
-export default PlayList;
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getServerSideProps(context: GetServerSidePropsContext): Promise<CustomServerSideResult> {
   const pageId = context.query.id;
   const userJwtPayload = getValidatedToken(context.req);
   const playlistInfo = await prismaClient.playlist.findFirst({
@@ -48,5 +29,22 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     },
   });
 
-  return { props: { playlistInfo } };
+  if (!playlistInfo) return { redirect: { permanent: false, destination: "/" } };
+
+  return {
+    props: {
+      songs: playlistInfo.songs,
+      layout: {
+        type: "MAIN",
+        mainContentProps: {
+          title: playlistInfo.name,
+          color: "green.900",
+          subtitle: "playlist",
+          roundImage: false,
+          description: `${playlistInfo.songs.length} songs`,
+          image: `https://picsum.photos/400?random=${playlistInfo.id}`,
+        },
+      },
+    },
+  };
 }

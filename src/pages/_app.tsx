@@ -1,31 +1,32 @@
 import { extendTheme, ChakraProvider } from "@chakra-ui/react";
 
-import MainLayout from "layouts/index";
+import AppLayout from "layouts/index";
+import { LAYOUT_TYPES } from "layouts/constants";
 import CHAKRA_THEME from "constants/chakra-theme";
 
 import "reset-css";
 
 import type { AppProps } from "next/app";
-import type { LayoutTypes } from "layouts/index";
-
-type CustomAppProps = {
-  [key in keyof AppProps]: key extends "Component"
-    ? AppProps["Component"] & { layoutType: LayoutTypes }
-    : AppProps[key];
-};
+import type { GetServerSidePropsResult } from "next";
+import type { AppLayoutProps } from "layouts/index";
 
 const theme = extendTheme(CHAKRA_THEME);
 
-function MyApp({ Component, pageProps }: CustomAppProps) {
-  const layoutType = Component.layoutType || "FULL_PAGE";
+export type CustomServerSideResult = GetServerSidePropsResult<{
+  [key: string]: any;
+  layout: Partial<Omit<AppLayoutProps, "children">>;
+}>;
+
+export default function MyApp({ Component, pageProps }: AppProps) {
+  const { layout, ...restPageProps } = pageProps;
+  const type = layout.type || LAYOUT_TYPES.FULL_PAGE;
+  const mainContentProps = layout.mainContentProps || {};
 
   return (
     <ChakraProvider theme={theme}>
-      <MainLayout type={layoutType}>
-        <Component {...pageProps} />
-      </MainLayout>
+      <AppLayout type={type} mainContentProps={mainContentProps}>
+        <Component {...restPageProps} />
+      </AppLayout>
     </ChakraProvider>
   );
 }
-
-export default MyApp;

@@ -1,16 +1,18 @@
 import { ReactNode } from "react";
 import { LAYOUTS } from "./constants";
 
-type LayoutTypes = keyof typeof LAYOUTS;
+import type { MainContentWrapperProps } from "components/main-content";
 
-type LayoutComponentProps = { children: ReactNode; type: LayoutTypes };
+export type LayoutTypes = keyof typeof LAYOUTS;
 
-function MainLayout({ children, type }: LayoutComponentProps) {
+export type AppLayoutProps = {
+  children: ReactNode;
+  type: LayoutTypes;
+  mainContentProps: Omit<MainContentWrapperProps, "children">;
+};
+
+export default function AppLayout({ children, type, mainContentProps }: AppLayoutProps) {
   const LayoutWrapper = LAYOUTS[type];
 
-  return <LayoutWrapper>{children}</LayoutWrapper>;
+  return <LayoutWrapper {...mainContentProps}>{children}</LayoutWrapper>;
 }
-
-export type { LayoutTypes, LayoutComponentProps };
-
-export default MainLayout;

@@ -4,20 +4,22 @@ import { Image } from "@chakra-ui/react";
 import type { ColorProps } from "@chakra-ui/react";
 import type { ReactNode } from "react";
 
-type GradientLayoutProps = {
+export type MainContentWrapperProps = {
   image: string;
-  roundImage: boolean;
-  children: ReactNode;
   title: ReactNode;
+  roundImage: boolean;
   subtitle: ReactNode;
+  children: ReactNode;
   description: ReactNode;
-  color: ColorProps["color"];
+  color: Exclude<ColorProps["color"], undefined>;
 };
 
-const GradientLayout = ({ color, children, image, subtitle, title, description, roundImage }: GradientLayoutProps) => {
+const MainContentWrapper = (props: MainContentWrapperProps) => {
+  const { color, children, image, subtitle, title, description, roundImage } = props;
+
   return (
-    <>
-      <Flex bgGradient={`linear(${color} 0%, gray.900 100%)`} padding="40px" align="end">
+    <Box as="main" width="calc(100% - 250px)" height="calc(100% - 100px)" overflowY="auto">
+      <Flex bgGradient={`linear(${color} 0%, gray.900 100%)`} padding="16" align="end">
         <Box padding="20px">
           <Image boxSize="160px" boxShadow="2xl" src={image} borderRadius={roundImage ? "100%" : "3px"} />
         </Box>
@@ -32,8 +34,8 @@ const GradientLayout = ({ color, children, image, subtitle, title, description, 
       <Box bgColor="gray.900" paddingY="50px">
         {children}
       </Box>
-    </>
+    </Box>
   );
 };
 
-export default GradientLayout;
+export default MainContentWrapper;

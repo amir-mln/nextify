@@ -1,4 +1,4 @@
-export type JsonSafeValues = string | number | boolean | null | JsonSafeValues[];
+export type JsonSafeValues = string | number | boolean | null | JsonSafeValues[] | { [key: string]: JsonSafeValues };
 
 export type ValidFetcherUrl = `/api/${string}` | `http${string}`;
 

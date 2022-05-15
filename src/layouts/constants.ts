@@ -1,8 +1,8 @@
 import FullPageLayout from "./full-page";
-import PlayerLayout from "./player";
+import MainLayout from "./main";
 
-const LAYOUTS = { FULL_PAGE: FullPageLayout, PLAYER: PlayerLayout };
+const LAYOUTS = { FULL_PAGE: FullPageLayout, MAIN: MainLayout };
 
-const LAYOUT_TYPES = { FULL_PAGE: "FULL_PAGE", PLAYER: "PLAYER" };
+const LAYOUT_TYPES = { FULL_PAGE: "FULL_PAGE", MAIN: "MAIN" };
 
 export { LAYOUTS, LAYOUT_TYPES };
