@@ -1,10 +1,9 @@
 import { extendTheme, ChakraProvider } from "@chakra-ui/react";
-import { StoreProvider } from "easy-peasy";
 
 import AppLayout from "layouts/index";
 import { LAYOUT_TYPES } from "layouts/constants";
 import CHAKRA_THEME from "constants/chakra-theme";
-import store from "store/index";
+import { PlayerDataProvider } from "context";
 
 import "reset-css";
 
@@ -21,17 +20,17 @@ export type CustomServerSideResult = GetServerSidePropsResult<{
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const { layout, ...restPageProps } = pageProps;
-  const type = layout.type || LAYOUT_TYPES.FULL_PAGE;
-  const mainContentProps = layout.mainContentProps || {};
+  const type = layout ? layout.type : LAYOUT_TYPES.FULL_PAGE;
+  const mainContentProps = layout ? layout.mainContentProps : {};
 
   return (
     <ChakraProvider theme={theme}>
       {/* @ts-ignore : This is an issue with react 18. read: https://github.com/ctrlplusb/easy-peasy/issues/741 */}
-      <StoreProvider store={store}>
+      <PlayerDataProvider>
         <AppLayout type={type} mainContentProps={mainContentProps}>
           <Component {...restPageProps} />
         </AppLayout>
-      </StoreProvider>
+      </PlayerDataProvider>
     </ChakraProvider>
   );
 }
