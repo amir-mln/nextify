@@ -34,7 +34,7 @@ function Player() {
   const [shouldRepeat, { toggle: toggleShouldRepeat }] = useBoolean(false);
   const [shouldShuffle, { toggle: toggleShouldShuffle }] = useBoolean(false);
   const { playingSong } = usePlayerData();
-  console.log(playingSong);
+
   const btnColors = {
     play: "green.500", // later use this to make btn gray on initial loading
     next: "gray.400",
@@ -68,7 +68,9 @@ function Player() {
 
   return (
     <>
-      <Box>{/* <ReactHowler /> */}</Box>
+      <Box>
+        <ReactHowler playing={isPlaying} src={playingSong.url} />
+      </Box>
 
       <ButtonGroup display="flex" alignItems="center" justifyContent="center" color="white">
         {playerButtons.map(renderButtons)}
