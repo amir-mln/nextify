@@ -7,7 +7,7 @@ import { getValidatedToken } from "lib/auth/validator";
 import type { GetServerSidePropsContext } from "next";
 import type { CustomServerSideResult } from "pages/_app";
 
-export type PlayListSong = Song & Pick<Artist, "name">;
+export type PlayListSong = Song & { artist: Pick<Artist, "name"> };
 
 export type PlaylistProps = { songs: PlayListSong[] };
 
