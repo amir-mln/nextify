@@ -1,4 +1,6 @@
 import { Box } from "@chakra-ui/layout";
+import { usePlayerDispatch } from "context";
+import { Action, useStoreActions } from "easy-peasy";
 import { BsFillPlayFill } from "react-icons/bs";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { Table, Thead, Td, Tr, Tbody, Th, IconButton } from "@chakra-ui/react";
@@ -8,11 +10,18 @@ import { formatDate, formatTime } from "lib/formatter";
 import type { PlayListSong } from "pages/playlists/[id]";
 
 const SongsTable = ({ songs }: { songs: PlayListSong[] }) => {
+  const { dispatchPlayerSongs, dispatchPlayingSong } = usePlayerDispatch();
+
+  function handlePlay(activeSong?: PlayListSong) {
+    dispatchPlayingSong(activeSong || songs[0]);
+  }
+
   return (
     <Box bg="transparent" color="white">
       <Box padding="10px" marginBottom="20px">
         <Box marginBottom="30px">
           <IconButton
+            onClick={() => handlePlay()}
             icon={<BsFillPlayFill fontSize="30px" />}
             aria-label="play"
             colorScheme="green"
@@ -41,10 +50,11 @@ const SongsTable = ({ songs }: { songs: PlayListSong[] }) => {
                   },
                 }}
                 key={song.id}
-                cursor="cursor"
               >
                 <Td>{i + 1}</Td>
-                <Td>{song.name}</Td>
+                <Td cursor="pointer" onClick={() => handlePlay(song)}>
+                  {song.name}
+                </Td>
                 <Td>{formatDate(song.createdAt)}</Td>
                 <Td>{formatTime(song.duration)}</Td>
               </Tr>
