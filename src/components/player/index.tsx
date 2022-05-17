@@ -11,12 +11,13 @@ import {
   useBoolean,
 } from "@chakra-ui/react";
 import ReactHowler from "react-howler";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MdShuffle, MdSkipPrevious, MdSkipNext, MdOutlineRepeat } from "react-icons/md";
 
 import PlayButton from "components/play-button";
 
 import { usePlayerData } from "context";
+import getRandomNum from "lib/random-number";
 
 const playerButtons = [
   { "outline": "none", "variant": "link", "aria-label": "shuffle", "fontSize": "larger", "icon": <MdShuffle /> },
@@ -33,7 +34,8 @@ function Player() {
   const [isPlaying, { toggle: toggleIsPlaying }] = useBoolean(false);
   const [shouldRepeat, { toggle: toggleShouldRepeat }] = useBoolean(false);
   const [shouldShuffle, { toggle: toggleShouldShuffle }] = useBoolean(false);
-  const { playingSong } = usePlayerData();
+  const { playingSong, playerSongs } = usePlayerData();
+  const playerRef = useRef<ReactHowler | null>(null);
 
   const btnColors = {
     play: "green.500", // later use this to make btn gray on initial loading
@@ -43,13 +45,48 @@ function Player() {
     repeat: shouldRepeat ? "gray.100" : "gray.400",
   };
 
-  const btnOnClicks = {
-    play: toggleIsPlaying,
-    shuffle: toggleShouldShuffle,
-    repeat: toggleShouldRepeat,
-    next: () => {},
-    prev: () => {},
-  };
+  const btnOnClicks = useMemo(
+    () => ({
+      play: toggleIsPlaying,
+      shuffle: toggleShouldShuffle,
+      repeat: toggleShouldRepeat,
+      next: () =>
+        setIndex((prevIndex) => {
+          let next = prevIndex === playerSongs.length - 1 ? 0 : prevIndex + 1;
+
+          if (shouldShuffle) {
+            next = getRandomNum(playerSongs.length, prevIndex);
+          }
+
+          return next;
+        }),
+      prev: () => setIndex((prev) => (prev ? prev - 1 : playerSongs.length - 1)),
+    }),
+    []
+  );
+
+  function onEnd() {
+    if (!playerRef.current) return;
+
+    if (!shouldRepeat) return btnOnClicks.next();
+
+    playerRef.current.seek(0);
+    setSeek(0);
+  }
+
+  function onLoad() {
+    if (!playerRef.current) return;
+
+    const songDuration = playerRef.current.duration();
+    setDuration(songDuration);
+  }
+
+  function onSeek(seekValues: number[]) {
+    if (!playerRef.current) return;
+
+    playerRef.current?.seek(seekValues[0]);
+    setSeek(parseFloat(seekValues[0] + ""));
+  }
 
   function renderButtons(buttonData: typeof playerButtons[number]) {
     const ariaLabel = buttonData["aria-label"] as keyof typeof btnColors;
@@ -69,7 +106,7 @@ function Player() {
   return (
     <>
       <Box>
-        <ReactHowler playing={isPlaying} src={playingSong.url} />
+        <ReactHowler playing={isPlaying} src={playingSong.url} ref={playerRef} onLoad={onLoad} onEnd={onEnd} />
       </Box>
 
       <ButtonGroup display="flex" alignItems="center" justifyContent="center" color="white">
@@ -78,10 +115,18 @@ function Player() {
 
       <Flex color="gray.400" justify="center" align="center">
         <Box width="10%">
-          <Text fontSize="xs">1:21</Text>
+          <Text fontSize="xs">00:00</Text>
         </Box>
         <Box width="80%">
-          <RangeSlider aria-label={["min", "max"]} step={0.1} min={0} max={321} id="player-range">
+          <RangeSlider
+            min={0}
+            step={0.1}
+            value={[seek]}
+            onChange={onSeek}
+            id="player-range"
+            aria-label={["min", "max"]}
+            max={duration ? +duration.toFixed(2) : 0}
+          >
             <RangeSliderTrack bg="gray.600">
               <RangeSliderFilledTrack bg="gray.100" />
             </RangeSliderTrack>
@@ -89,7 +134,7 @@ function Player() {
           </RangeSlider>
         </Box>
         <Box width="10%" textAlign="right">
-          <Text fontSize="xs">3:21</Text>
+          <Text fontSize="xs">{(duration / 60).toFixed(2)}</Text>
         </Box>
       </Flex>
     </>
