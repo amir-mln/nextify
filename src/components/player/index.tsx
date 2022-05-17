@@ -18,6 +18,7 @@ import PlayButton from "components/play-button";
 
 import { usePlayerData } from "context";
 import getRandomNum from "lib/random-number";
+import { formatTime } from "lib/formatter";
 
 const playerButtons = [
   { "outline": "none", "variant": "link", "aria-label": "shuffle", "fontSize": "larger", "icon": <MdShuffle /> },
@@ -31,6 +32,7 @@ function Player() {
   const [index, setIndex] = useState(0);
   const [seek, setSeek] = useState(0.0);
   const [duration, setDuration] = useState(0.0);
+  const [isSeeking, { on: setIsSeekingOn, off: setIsSeekingOff }] = useBoolean(false);
   const [isPlaying, { toggle: toggleIsPlaying }] = useBoolean(false);
   const [shouldRepeat, { toggle: toggleShouldRepeat }] = useBoolean(false);
   const [shouldShuffle, { toggle: toggleShouldShuffle }] = useBoolean(false);
@@ -101,6 +103,20 @@ function Player() {
     );
   }
 
+  useEffect(() => {
+    let timerId: number;
+
+    if (isPlaying && !isSeeking) {
+      const raqCallback = () => {
+        setSeek(playerRef.current!.seek());
+        timerId = requestAnimationFrame(raqCallback);
+      };
+
+      timerId = requestAnimationFrame(raqCallback);
+      return () => cancelAnimationFrame(timerId);
+    }
+  }, [isPlaying, isSeeking]);
+
   if (!playingSong) return null;
 
   return (
@@ -115,7 +131,7 @@ function Player() {
 
       <Flex color="gray.400" justify="center" align="center">
         <Box width="10%">
-          <Text fontSize="xs">00:00</Text>
+          <Text fontSize="xs">{formatTime(seek)}</Text>
         </Box>
         <Box width="80%">
           <RangeSlider
@@ -125,6 +141,8 @@ function Player() {
             onChange={onSeek}
             id="player-range"
             aria-label={["min", "max"]}
+            onChangeStart={setIsSeekingOn}
+            onChangeEnd={setIsSeekingOff}
             max={duration ? +duration.toFixed(2) : 0}
           >
             <RangeSliderTrack bg="gray.600">
@@ -134,7 +152,7 @@ function Player() {
           </RangeSlider>
         </Box>
         <Box width="10%" textAlign="right">
-          <Text fontSize="xs">{(duration / 60).toFixed(2)}</Text>
+          <Text fontSize="xs">{formatTime(duration)}</Text>
         </Box>
       </Flex>
     </>
