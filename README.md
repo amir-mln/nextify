@@ -8,7 +8,7 @@ In order to not make this app just a `copy and paste` version of the course i tr
 - I implemented the layout differently.
 - I used typescript way more strictly than the instructor did.
 - My state management is different.
-- I even designed my own logo, and picked the name of the app on my own.
+- ...
 
 I'll add more features such as song upload, single song play, creating playlist and ... .
 
