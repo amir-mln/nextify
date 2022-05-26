@@ -44,6 +44,13 @@ In the end run the dev server with
 npm run dev
 ```
 
+use the following email and password to login:
+
+```
+email: admin@admins.com
+password: password
+```
+
 ## Technology Stack
 
 <a style="margin-right: 1rem" href="https://reactjs.org/" title="React"><img src="markdown/reactjs.svg" width="48" height="48" /></a>
