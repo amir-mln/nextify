@@ -22,7 +22,7 @@ function MainFooter() {
       <Box flexBasis="40%">
         <Player />
       </Box>
-      <Box flexBasis="20%">controls</Box>
+      <Box flexBasis="20%"></Box>
     </Box>
   );
 }
