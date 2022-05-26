@@ -3,7 +3,7 @@ import { extendTheme, ChakraProvider } from "@chakra-ui/react";
 import AppLayout from "layouts/index";
 import { LAYOUT_TYPES } from "layouts/constants";
 import CHAKRA_THEME from "constants/chakra-theme";
-import { PlayerDataProvider } from "context";
+import PlayerProvider from "context";
 
 import "reset-css";
 
@@ -25,12 +25,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ChakraProvider theme={theme}>
-      {/* @ts-ignore : This is an issue with react 18. read: https://github.com/ctrlplusb/easy-peasy/issues/741 */}
-      <PlayerDataProvider>
+      <PlayerProvider>
         <AppLayout type={type} mainContentProps={mainContentProps}>
           <Component {...restPageProps} />
         </AppLayout>
-      </PlayerDataProvider>
+      </PlayerProvider>
     </ChakraProvider>
   );
 }

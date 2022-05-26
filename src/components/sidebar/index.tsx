@@ -39,10 +39,10 @@ const musicMenu = [
 ];
 
 function SideBar() {
-  const { data: playlists, loading } = useCustomSWR<Playlist[]>("/api/playlists");
+  const { data: playlists, loading, error } = useCustomSWR<Playlist[]>("/api/playlists");
 
   function renderPlaylistItems() {
-    if (loading || !playlists) return null;
+    if (loading || !playlists || error) return null;
 
     return playlists.map((playlist) => (
       <ListItem key={playlist.id + playlist.name}>

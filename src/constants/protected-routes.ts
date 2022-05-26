@@ -1,1 +1,1 @@
-export const PROTECTED_PAGES = { SHOULD_SIGNED_IN: ["/", "/playlist", "/library"] };
+export const PROTECTED_PAGES = { SHOULD_SIGN_IN: [/^\/$/, /^\/playlist\/?\d?/] };

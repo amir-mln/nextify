@@ -1,76 +1,42 @@
 import {
-  ButtonGroup,
   Box,
-  IconButton,
-  RangeSlider,
-  RangeSliderFilledTrack,
-  RangeSliderTrack,
-  RangeSliderThumb,
   Flex,
   Text,
+  IconButton,
   useBoolean,
+  ButtonGroup,
+  RangeSlider,
+  RangeSliderThumb,
+  RangeSliderTrack,
+  RangeSliderFilledTrack,
 } from "@chakra-ui/react";
 import ReactHowler from "react-howler";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { MdShuffle, MdSkipPrevious, MdSkipNext, MdOutlineRepeat } from "react-icons/md";
+import { useEffect, useRef, useState } from "react";
 
-import PlayButton from "components/play-button";
-
-import { usePlayerData } from "context";
-import getRandomNum from "lib/random-number";
+import { usePlayerDispatch, usePlayerState } from "context";
 import { formatTime } from "lib/formatter";
+import { usePlayingSong } from "hooks/use-playing-songs";
 
-const playerButtons = [
-  { "outline": "none", "variant": "link", "aria-label": "shuffle", "fontSize": "larger", "icon": <MdShuffle /> },
-  { "outline": "none", "variant": "link", "aria-label": "prev", "fontSize": "larger", "icon": <MdSkipPrevious /> },
-  { "outline": "none", "variant": "link", "aria-label": "play", "fontSize": "2.5rem" },
-  { "outline": "none", "variant": "link", "aria-label": "next", "fontSize": "larger", "icon": <MdSkipNext /> },
-  { "outline": "none", "variant": "link", "aria-label": "repeat", "fontSize": "larger", "icon": <MdOutlineRepeat /> },
-];
+import ShuffleButton from "./components/buttons/shuffle";
+import PrevButton from "./components/buttons/prev";
+import PlayButton from "./components/buttons/play";
+import NextButton from "./components/buttons/next";
+import RepeatButton from "./components/buttons/repeat";
 
 function Player() {
-  const [index, setIndex] = useState(0);
   const [seek, setSeek] = useState(0.0);
   const [duration, setDuration] = useState(0.0);
   const [isSeeking, { on: setIsSeekingOn, off: setIsSeekingOff }] = useBoolean(false);
-  const [isPlaying, { toggle: toggleIsPlaying }] = useBoolean(false);
-  const [shouldRepeat, { toggle: toggleShouldRepeat }] = useBoolean(false);
-  const [shouldShuffle, { toggle: toggleShouldShuffle }] = useBoolean(false);
-  const { playingSong, playerSongs } = usePlayerData();
   const playerRef = useRef<ReactHowler | null>(null);
 
-  const btnColors = {
-    play: "green.500", // later use this to make btn gray on initial loading
-    next: "gray.400",
-    prev: "gray.400",
-    shuffle: shouldShuffle ? "gray.100" : "gray.400",
-    repeat: shouldRepeat ? "gray.100" : "gray.400",
-  };
-
-  const btnOnClicks = useMemo(
-    () => ({
-      play: toggleIsPlaying,
-      shuffle: toggleShouldShuffle,
-      repeat: toggleShouldRepeat,
-      next: () =>
-        setIndex((prevIndex) => {
-          let next = prevIndex === playerSongs.length - 1 ? 0 : prevIndex + 1;
-
-          if (shouldShuffle) {
-            next = getRandomNum(playerSongs.length, prevIndex);
-          }
-
-          return next;
-        }),
-      prev: () => setIndex((prev) => (prev ? prev - 1 : playerSongs.length - 1)),
-    }),
-    []
-  );
+  const playingSong = usePlayingSong();
+  const { shouldRepeat, playing: isPlaying } = usePlayerState();
+  const dispatch = usePlayerDispatch();
 
   function onEnd() {
     if (!playerRef.current) return;
 
-    if (!shouldRepeat) return btnOnClicks.next();
+    if (!shouldRepeat) return dispatch({ type: "INCREASE_PLAYER_INDEX" });
 
     playerRef.current.seek(0);
     setSeek(0);
@@ -87,20 +53,7 @@ function Player() {
     if (!playerRef.current) return;
 
     playerRef.current?.seek(seekValues[0]);
-    setSeek(parseFloat(seekValues[0] + ""));
-  }
-
-  function renderButtons(buttonData: typeof playerButtons[number]) {
-    const ariaLabel = buttonData["aria-label"] as keyof typeof btnColors;
-    const isPlayBtn = ariaLabel === "play";
-    const buttonColor = btnColors[ariaLabel];
-    const buttonOnClick = btnOnClicks[ariaLabel];
-
-    return isPlayBtn ? (
-      <PlayButton key={ariaLabel} {...buttonData} color={buttonColor} onClick={buttonOnClick} playing={isPlaying} />
-    ) : (
-      <IconButton key={ariaLabel} {...buttonData} color={buttonColor} onClick={buttonOnClick} />
-    );
+    setSeek(seekValues[0]);
   }
 
   useEffect(() => {
@@ -126,7 +79,11 @@ function Player() {
       </Box>
 
       <ButtonGroup display="flex" alignItems="center" justifyContent="center" color="white">
-        {playerButtons.map(renderButtons)}
+        <ShuffleButton />
+        <PrevButton />
+        <PlayButton />
+        <NextButton />
+        <RepeatButton />
       </ButtonGroup>
 
       <Flex color="gray.400" justify="center" align="center">
@@ -138,9 +95,9 @@ function Player() {
             min={0}
             step={0.1}
             value={[seek]}
-            onChange={onSeek}
             id="player-range"
             aria-label={["min", "max"]}
+            onChange={onSeek}
             onChangeStart={setIsSeekingOn}
             onChangeEnd={setIsSeekingOff}
             max={duration ? +duration.toFixed(2) : 0}

@@ -1,8 +1,8 @@
 import { Box, Text } from "@chakra-ui/layout";
-import { usePlayerData } from "context";
+import { usePlayingSong } from "hooks/use-playing-songs";
 
 function SongInfo() {
-  const { playingSong } = usePlayerData();
+  const playingSong = usePlayingSong();
   return (
     <Box>
       <Text fontSize="large">{playingSong?.name}</Text>
