@@ -75,7 +75,7 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
     }
     case "INCREASE_PLAYER_INDEX": {
       const { shouldRepeat, index, songsIndex } = state;
-      const isLastSong = index === songsIndex.length;
+      const isLastSong = index + 1 === songsIndex.length;
 
       if (shouldRepeat) return state;
 
