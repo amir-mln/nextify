@@ -7,13 +7,13 @@ import type { User } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  const { email, password } = req.body;
+  const { email, username, password } = req.body as { [prop: string]: string };
   const salt = await bcrypt.genSalt();
   const hashedPass = await bcrypt.hash(password, salt);
 
   let user: User;
   try {
-    user = await prismaClient.user.create({ data: { email, password: hashedPass } });
+    user = await prismaClient.user.create({ data: { email, username, password: hashedPass } });
   } catch (e) {
     return res.status(401).json({ error: "Something's wrong..." });
   }

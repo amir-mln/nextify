@@ -4,7 +4,7 @@ import prismaClient from "lib/prisma-client";
 import type { User } from "@prisma/client";
 import type { NextApiRequestCookies } from "next/dist/server/api-utils";
 
-export type ValidatedUser = Pick<User, "id" | "email" | "firstName" | "lastName">;
+export type ValidatedUser = Pick<User, "id" | "email" | "username">;
 export type RequestCookies = { cookies: NextApiRequestCookies };
 export interface ValidationRequest extends RequestCookies {}
 

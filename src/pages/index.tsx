@@ -51,7 +51,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext): Pr
           roundImage: true,
           color: "teal.900",
           subtitle: "profile",
-          title: user!.firstName + " " + user!.lastName,
+          title: user!.username,
           description: `${playlistsCount} public playlists`,
           image: "https://dl.dropboxusercontent.com/s/bgiv0ssz3xpotz9/peep.png?dl=0",
         },

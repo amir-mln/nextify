@@ -21,8 +21,7 @@ const uspsertedArtists = artistsData.map(upsertArtist);
 
 Promise.all(uspsertedArtists)
   .then(() => {
-    const firstName = "Amir";
-    const lastName = "Molaeyan";
+    const username = "Amir Molaeyan";
     const email = "admin@admins.com";
     const salt = bcrypt.genSaltSync();
     const password = bcrypt.hashSync("password", salt);
@@ -30,7 +29,7 @@ Promise.all(uspsertedArtists)
     return prisma.user.upsert({
       where: { email },
       update: {},
-      create: { email, password, firstName, lastName },
+      create: { email, password, username },
     });
   })
   .then(async (user) => {
