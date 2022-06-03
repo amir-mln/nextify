@@ -4,16 +4,20 @@ export type ValidFetcherUrl = `/api/${string}` | `http${string}`;
 
 export type ValidJsonObj = { [prop: string]: JsonSafeValues };
 
-export default async function fetcher(url: ValidFetcherUrl, data?: ValidJsonObj) {
+export default async function fetcher(url: ValidFetcherUrl, body?: ValidJsonObj) {
   const res = await fetch(url, {
-    method: data ? "POST" : "GET",
+    method: body ? "POST" : "GET",
     credentials: "include",
     headers: {
+      "Accept": "application/json, text/*",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(body),
   });
-  if (res.status > 399 && res.status < 200) throw new Error();
 
-  return await res.json();
+  const data = await res.json();
+
+  if (res.status > 399 || res.status < 200) throw new Error(data.error);
+
+  return data;
 }
