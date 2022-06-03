@@ -1,5 +1,5 @@
 import NextLink from "next/link";
-import { MdHome, MdSearch, MdLibraryMusic, MdPlaylistAdd, MdFavorite } from "react-icons/md";
+import { MdHome, MdSearch, MdLibraryMusic, MdPlaylistAdd, MdLogout } from "react-icons/md";
 import { Box, List, ListItem, ListIcon, Divider, Link as ChakraLink } from "@chakra-ui/layout";
 
 import BrandLogo from "components/brand-logo";
@@ -32,9 +32,9 @@ const musicMenu = [
     route: "/",
   },
   {
-    name: "Favorites",
-    icon: MdFavorite,
-    route: "/favorites",
+    name: "Sign Out",
+    icon: MdLogout,
+    route: "/api/auth/signout",
   },
 ];
 
