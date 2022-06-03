@@ -21,7 +21,7 @@ export default function Home({ artists }: HomePageProps) {
       </Box>
       <Flex>
         {artists.map((artist) => (
-          <Box key={artist.id + artist.name} paddingX="10px" width="20%">
+          <Box key={artist.id + artist.name} paddingX="10px" width="20%" height="280px">
             <Box bg="gray.800" borderRadius="4px" padding="15px" width="100%">
               <Image src="https://placekitten.com/300/300" borderRadius="100%" />
               <Box marginTop="20px">

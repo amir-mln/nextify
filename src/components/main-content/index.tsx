@@ -18,7 +18,13 @@ const MainContentWrapper = (props: MainContentWrapperProps) => {
   const { color, children, image, subtitle, title, description, roundImage } = props;
 
   return (
-    <Box as="main" width="calc(100% - 250px)" height="calc(100% - 81px)" overflowY="auto">
+    <Box
+      as="main"
+      overflowY="auto"
+      width="calc(100% - 250px)"
+      minHeight="calc(100% - 81px)"
+      maxHeight="calc(100% - 81px)"
+    >
       <Flex bgGradient={`linear(${color} 0%, gray.900 100%)`} padding="16" align="end">
         <Box padding="20px">
           <Image boxSize="160px" boxShadow="2xl" src={image} borderRadius={roundImage ? "100%" : "3px"} />
