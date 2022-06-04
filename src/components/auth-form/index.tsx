@@ -120,7 +120,7 @@ function AuthForm({ mode }: { mode: AuthFetcherMods }) {
             {mode}
           </Button>
           <NextLink href={`/auth/${inSignupMode ? "signin" : "signup"}`} passHref>
-            <Link>{inSignupMode ? "Already Have An Account?" : "Want To Create A New Account?"}</Link>
+            <Link fontSize="sm">{inSignupMode ? "Already Have An Account?" : "Create A New Account?"}</Link>
           </NextLink>
         </Box>
       </Box>
