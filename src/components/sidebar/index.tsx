@@ -1,5 +1,6 @@
 import NextLink from "next/link";
-import { MdHome, MdSearch, MdLibraryMusic, MdPlaylistAdd, MdLogout } from "react-icons/md";
+import { TbPlaylist, TbMusic } from "react-icons/tb";
+import { MdOutlineHome, MdSearch, MdOutlineLibraryMusic, MdLogout } from "react-icons/md";
 import { Box, List, ListItem, ListIcon, Divider, Link as ChakraLink } from "@chakra-ui/layout";
 
 import BrandLogo from "components/brand-logo";
@@ -10,7 +11,7 @@ import type { Playlist } from "@prisma/client";
 const navItems = [
   {
     name: "Home",
-    icon: MdHome,
+    icon: MdOutlineHome,
     route: "/",
   },
   {
@@ -20,7 +21,7 @@ const navItems = [
   },
   {
     name: "Your Library",
-    icon: MdLibraryMusic,
+    icon: MdOutlineLibraryMusic,
     route: "/library",
   },
 ];
@@ -28,8 +29,13 @@ const navItems = [
 const musicMenu = [
   {
     name: "Create Playlist",
-    icon: MdPlaylistAdd,
-    route: "/",
+    icon: TbPlaylist,
+    route: "/new-playlist",
+  },
+  {
+    name: "Upload A Song",
+    icon: TbMusic,
+    route: "/new-song",
   },
   {
     name: "Sign Out",
