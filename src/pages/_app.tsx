@@ -13,7 +13,7 @@ import type { AppLayoutProps } from "layouts/index";
 
 const theme = extendTheme(CHAKRA_THEME);
 
-export type CustomServerSideResult = GetServerSidePropsResult<{
+export type PagePropsWithLayout = GetServerSidePropsResult<{
   [key: string]: any;
   layout: Partial<Omit<AppLayoutProps, "children">>;
 }>;

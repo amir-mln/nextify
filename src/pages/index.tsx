@@ -6,7 +6,7 @@ import prismaClient from "lib/prisma-client";
 import { getValidatedUser } from "lib/auth/validator";
 
 import type { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
-import type { CustomServerSideResult } from "./_app";
+import type { PagePropsWithLayout } from "./_app";
 
 type HomePageProps = { artists: Artist[] };
 
@@ -22,7 +22,7 @@ export default function Home({ artists }: HomePageProps) {
       <Flex>
         {artists.map((artist) => (
           <Box key={artist.id + artist.name} paddingX="10px" width="20%" height="280px">
-            <Box bg="gray.800" borderRadius="4px" padding="15px" width="100%">
+            <Box bg="gray.800" borderRadius="4px" padding="15px" width="100%" height="100%">
               <Image src="https://placekitten.com/300/300" borderRadius="100%" />
               <Box marginTop="20px">
                 <Text fontSize="large">{artist.name}</Text>
@@ -36,7 +36,7 @@ export default function Home({ artists }: HomePageProps) {
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext): Promise<CustomServerSideResult> {
+export async function getServerSideProps(context: GetServerSidePropsContext): Promise<PagePropsWithLayout> {
   const user = await getValidatedUser(context.req);
   const artists = await prismaClient.artist.findMany({ select: { name: true, id: true } });
   // the middleware that runs before this guarantees that user wont be null

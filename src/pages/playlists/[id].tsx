@@ -11,7 +11,7 @@ import { formatDate, formatTime } from "lib/formatter";
 import { getValidatedToken } from "lib/auth/validator";
 
 import type { GetServerSidePropsContext } from "next";
-import type { CustomServerSideResult } from "pages/_app";
+import type { PagePropsWithLayout } from "pages/_app";
 
 export type PlayListSong = Song & { artist: Pick<Artist, "name"> };
 
@@ -75,7 +75,7 @@ export default function PlayList({ songs, key }: PlaylistProps) {
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext): Promise<CustomServerSideResult> {
+export async function getServerSideProps(context: GetServerSidePropsContext): Promise<PagePropsWithLayout> {
   const pageId = context.query.id;
   const userJwtPayload = getValidatedToken(context.req);
   const playlistInfo = await prismaClient.playlist.findFirst({
