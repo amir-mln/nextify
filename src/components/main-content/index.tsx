@@ -26,9 +26,9 @@ const MainContentWrapper = (props: MainContentWrapperProps) => {
       maxHeight="calc(100% - 81px)"
     >
       <Flex bgGradient={`linear(${color} 0%, gray.900 100%)`} padding="16" align="end">
-        <Box padding="20px">
-          <Image boxSize="160px" boxShadow="2xl" src={image} borderRadius={roundImage ? "100%" : "3px"} />
-        </Box>
+        {!!image && (
+          <Image margin="20px" boxSize="160px" boxShadow="2xl" src={image} borderRadius={roundImage ? "100%" : "3px"} />
+        )}
         <Box padding="20px" lineHeight="40px" color="white">
           <Text fontSize="x-small" fontWeight="bold" casing="uppercase">
             {subtitle}
