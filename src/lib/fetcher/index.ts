@@ -2,22 +2,24 @@ export type JsonSafeValues = string | number | boolean | null | JsonSafeValues[]
 
 export type ValidFetcherUrl = `/api/${string}` | `http${string}`;
 
-export type ValidJsonObj = { [prop: string]: JsonSafeValues };
+export type ValidFetcherBody = { [prop: string]: JsonSafeValues } | FormData;
 
-export default async function fetcher(url: ValidFetcherUrl, body?: ValidJsonObj) {
+export type FetcherContentType = "application/json" | "multipart/form-data" | "application/x-www-form-urlencoded";
+
+export default async function fetcher(url: ValidFetcherUrl, body?: ValidFetcherBody, contentType?: FetcherContentType) {
   const res = await fetch(url, {
     method: body ? "POST" : "GET",
     credentials: "include",
     headers: {
       "Accept": "application/json, text/*",
-      "Content-Type": "application/json",
+      "Content-Type": contentType || "application/json",
     },
     body: JSON.stringify(body),
   });
 
-  const data = await res.json();
+  if (res.status > 399 || res.status < 200) throw new Error(res.statusText);
 
-  if (res.status > 399 || res.status < 200) throw new Error(data.error);
+  const data = await res.json();
 
   return data;
 }
