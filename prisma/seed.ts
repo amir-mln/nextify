@@ -5,7 +5,7 @@ import { artistsData } from "./songsData";
 const prisma = new PrismaClient();
 
 function upsertArtist(artist: typeof artistsData[number]) {
-  const createdSongs = artist.songs.map(({ name, duration, url }) => ({ name, duration, url }));
+  const createdSongs = artist.songs.map(({ name, url }) => ({ name, url }));
 
   return prisma.artist.upsert({
     where: { name: artist.name },
