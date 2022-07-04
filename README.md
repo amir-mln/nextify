@@ -3,14 +3,7 @@
 This is a music app that is basically a spotify clone.
 The project was initially created by coding along a [FrontendMasters](https://frontendmasters.com/courses/fullstack-app-next/) project-based course.
 
-In order to not make this app just a `copy and paste` version of the course i tried to do things as differently as i could.
-
-- I implemented the layout differently.
-- I used typescript way more strictly than the instructor did.
-- My state management is different.
-- ...
-
-I'll add more features such as song upload, single song play, creating playlist and ... .
+In order to make this more than just a project that was coded along a course, i added features such as song upload, single song play, creating new playlist; I also used typescript way more strictly than the course instructor did.
 
 ## Getting Started
 
@@ -32,7 +25,7 @@ To install all packages run
 npm install
 ```
 
-After installing you need to push the prisma schema to the database and run the seed. so basically run
+After installing you need to push the prisma schema to the database
 
 ```
 npx prisma migrate dev
@@ -42,13 +35,6 @@ In the end run the dev server with
 
 ```
 npm run dev
-```
-
-use the following email and password to login:
-
-```
-email: admin@admins.com
-password: password
 ```
 
 ## Technology Stack
