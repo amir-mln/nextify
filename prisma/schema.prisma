@@ -25,7 +25,7 @@ model Song {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   name      String
-  url       String
+  url       String     @unique
   artist    Artist     @relation(fields: [artistId], references: [id])
   artistId  Int
   playlists Playlist[]
