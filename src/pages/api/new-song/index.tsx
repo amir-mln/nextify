@@ -29,8 +29,8 @@ const multerStorage = multer.diskStorage({
     }
   },
   async filename(req, file, callback) {
-    const songName = (req.body.title as string).toLowerCase().trim().replace(/\s+/g, "-");
-    const artistName = (req.body.artist as string).toLowerCase().trim().replace(/\s+/g, "-");
+    const songName = (req.body.title as string).toLowerCase().trim();
+    const artistName = (req.body.artist as string).toLowerCase().trim();
     const exists = await prismaClient.song.findFirst({ where: { name: songName, artist: { name: artistName } } });
 
     if (exists) {
@@ -38,7 +38,7 @@ const multerStorage = multer.diskStorage({
       callback(existsError, "");
     } else {
       const songExtension = file.originalname.replace(/.+(?=\.\S+)/g, "");
-      const songFileName = songName + songExtension;
+      const songFileName = songName.replace(/\s+/g, "-") + songExtension;
       callback(null, songFileName);
     }
   },
@@ -50,8 +50,8 @@ const apiHandler: HigherApiHandler<{ file: Partial<MemoryFile> }> = async (req, 
   const filePath = req.file.path;
   const redundantPath = path.join(path.resolve("."), "public");
   const url = filePath!.replace(redundantPath, "").replaceAll("\\", "/");
-  const songName = (req.body.title as string).toLowerCase().trim().replace(/\s+/g, "-");
-  const artistName = (req.body.artist as string).toLowerCase().trim().replace(/\s+/g, "-");
+  const songName = (req.body.title as string).toLowerCase().trim();
+  const artistName = (req.body.artist as string).toLowerCase().trim();
 
   await prismaClient.song.create({
     data: {
