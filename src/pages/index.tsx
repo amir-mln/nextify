@@ -1,50 +1,43 @@
-import { Image } from "@chakra-ui/react";
-import { Artist } from "@prisma/client";
 import { Box, Text, Flex } from "@chakra-ui/layout";
 
+import SongBox from "components/song-box";
 import prismaClient from "lib/prisma-client";
 import { getValidatedUser } from "lib/auth/validator";
 
-import type { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import type { PagePropsWithLayout } from "./_app";
+import type { PlayListSong } from "./playlists/[id]";
+import type { GetServerSidePropsContext } from "next";
 
-type HomePageProps = { artists: Artist[] };
+type HomePageProps = { songs: PlayListSong[] };
 
-export default function Home({ artists }: HomePageProps) {
+export default function Home({ songs }: HomePageProps) {
+  const homeSongs = songs.map((song) => <SongBox key={song.url} song={song} />);
+
   return (
     <Box color="white" paddingX="40px">
       <Box marginBottom="40px">
         <Text fontSize="2xl" fontWeight="bold">
-          Top Artists This Month
+          Some Songs
         </Text>
         <Text fontSize="md">Based On Your Preference</Text>
       </Box>
-      <Flex>
-        {artists.map((artist) => (
-          <Box key={artist.id + artist.name} paddingX="10px" width="20%" height="280px">
-            <Box bg="gray.800" borderRadius="4px" padding="15px" width="100%" height="100%">
-              <Image src="https://placekitten.com/300/300" borderRadius="100%" />
-              <Box marginTop="20px">
-                <Text fontSize="large">{artist.name}</Text>
-                <Text fontSize="x-small">Artist</Text>
-              </Box>
-            </Box>
-          </Box>
-        ))}
-      </Flex>
+      <Flex justifyContent="space-between">{homeSongs}</Flex>
     </Box>
   );
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext): Promise<PagePropsWithLayout> {
   const user = await getValidatedUser(context.req);
-  const artists = await prismaClient.artist.findMany({ select: { name: true, id: true } });
+  const songs = await prismaClient.song.findMany({
+    select: { name: true, url: true, artist: { select: { name: true } } },
+    take: 5,
+  });
   // the middleware that runs before this guarantees that user wont be null
   const playlistsCount = await prismaClient.playlist.count({ where: { userId: user!.id } });
 
   return {
     props: {
-      artists,
+      songs,
       layout: {
         type: "MAIN",
         mainContentProps: {
