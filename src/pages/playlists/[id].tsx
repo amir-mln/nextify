@@ -1,19 +1,18 @@
-import { Artist, Song } from "@prisma/client";
-
 import { Box } from "@chakra-ui/layout";
 import { BsFillPlayFill } from "react-icons/bs";
-import { AiOutlineClockCircle } from "react-icons/ai";
 import { Table, Thead, Td, Tr, Tbody, Th, IconButton } from "@chakra-ui/react";
 
 import { usePlayerDispatch } from "context";
 import prismaClient from "lib/prisma-client";
-import { formatDate, formatTime } from "lib/formatter";
+import { capitalizeString } from "lib/formatter";
 import { getValidatedToken } from "lib/auth/validator";
+import PlayButton from "components/player/components/buttons/play";
 
+import type { Artist, Song } from "@prisma/client";
 import type { GetServerSidePropsContext } from "next";
 import type { PagePropsWithLayout } from "pages/_app";
 
-export type PlayListSong = Song & { artist: Pick<Artist, "name"> };
+export type PlayListSong = Pick<Song, "name" | "url"> & { artist: Pick<Artist, "name"> };
 
 export type PlaylistProps = { songs: PlayListSong[]; key: string };
 
@@ -43,10 +42,8 @@ export default function PlayList({ songs, key }: PlaylistProps) {
             <Tr>
               <Th>#</Th>
               <Th>Title</Th>
-              <Th>Date Added</Th>
-              <Th>
-                <AiOutlineClockCircle />
-              </Th>
+              <Th>Artist</Th>
+              <Th>Play</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -58,14 +55,16 @@ export default function PlayList({ songs, key }: PlaylistProps) {
                     bg: "rgba(255,255,255, 0.1)",
                   },
                 }}
-                key={song.id}
+                key={song.url}
               >
                 <Td>{i + 1}</Td>
                 <Td cursor="pointer" onClick={() => handlePlay(i)}>
-                  {song.name}
+                  {capitalizeString(song.name)}
                 </Td>
-                <Td>{formatDate(song.createdAt)}</Td>
-                <Td>{formatTime(song.duration)}</Td>
+                <Td>{capitalizeString(song.artist.name)}</Td>
+                <Td>
+                  <PlayButton fontSize="1.5rem" clickCallback={() => handlePlay(i)} />
+                </Td>
               </Tr>
             ))}
           </Tbody>
