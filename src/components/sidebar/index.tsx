@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 import { TbPlaylist, TbMusic } from "react-icons/tb";
-import { MdOutlineHome, MdSearch, MdOutlineLibraryMusic, MdLogout } from "react-icons/md";
+import { MdOutlineHome, MdOutlineLibraryMusic, MdLogout } from "react-icons/md";
 import { Box, List, ListItem, ListIcon, Divider, Link as ChakraLink } from "@chakra-ui/layout";
 
 import BrandLogo from "components/brand-logo";
@@ -14,19 +14,6 @@ const navItems = [
     icon: MdOutlineHome,
     route: "/",
   },
-  {
-    name: "Search",
-    icon: MdSearch,
-    route: "/search",
-  },
-  {
-    name: "Your Library",
-    icon: MdOutlineLibraryMusic,
-    route: "/library",
-  },
-];
-
-const musicMenu = [
   {
     name: "Create Playlist",
     icon: TbPlaylist,
@@ -72,23 +59,6 @@ function SideBar() {
         <BrandLogo />
         <List marginBottom="24px" spacing={2}>
           {navItems.map((menu) => (
-            <ListItem fontSize="16px" key={menu.name}>
-              <NextLink href={menu.route} passHref>
-                <ChakraLink
-                  color="gray.300"
-                  outline="none"
-                  _focus={{ outline: "none" }}
-                  _hover={{ textDecoration: "none", color: "gray.50" }}
-                >
-                  <ListIcon as={menu.icon} marginRight="20px" fontSize="1.25rem" />
-                  {menu.name}
-                </ChakraLink>
-              </NextLink>
-            </ListItem>
-          ))}
-        </List>
-        <List spacing={2}>
-          {musicMenu.map((menu) => (
             <ListItem fontSize="16px" key={menu.name}>
               <NextLink href={menu.route} passHref>
                 <ChakraLink
