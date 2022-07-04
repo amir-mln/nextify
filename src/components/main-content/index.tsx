@@ -21,6 +21,7 @@ const MainContentWrapper = (props: MainContentWrapperProps) => {
     <Box
       as="main"
       overflowY="auto"
+      bgColor="gray.900"
       width="calc(100% - 250px)"
       minHeight="calc(100% - 81px)"
       maxHeight="calc(100% - 81px)"
@@ -37,9 +38,7 @@ const MainContentWrapper = (props: MainContentWrapperProps) => {
           <Text fontSize="x-small">{description}</Text>
         </Box>
       </Flex>
-      <Box bgColor="gray.900" paddingY="50px">
-        {children}
-      </Box>
+      <Box paddingY="50px">{children}</Box>
     </Box>
   );
 };
